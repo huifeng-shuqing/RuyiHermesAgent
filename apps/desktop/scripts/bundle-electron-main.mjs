@@ -20,7 +20,7 @@ const distDir = resolve(root, 'dist')
 mkdirSync(distDir, { recursive: true })
 
 const mainEntry = resolve(root, 'electron/main.ts')
-const mainOut = resolve(distDir, 'electron-main.mjs')
+const mainOut = resolve(distDir, 'electron-main.cjs')
 const preloadEntry = resolve(root, 'electron/preload.ts')
 const preloadOut = resolve(distDir, 'electron-preload.js')
 
@@ -38,13 +38,10 @@ await build({
   entryPoints: [mainEntry],
   bundle: true,
   platform: 'node',
-  format: 'esm',
+  format: 'cjs',
   target: 'node20',
   outfile: mainOut,
   external,
-  banner: {
-    js: "import { createRequire } from 'module'; const require = createRequire(import.meta.url);",
-  },
   define,
   logLevel: 'info',
 })
