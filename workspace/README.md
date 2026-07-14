@@ -45,8 +45,6 @@
 ./run-desktop.sh
 ```
 
-![Hermes 桌面端](assets/desktop-app.png)
-
 **注意**：桌面端使用独立的干净 PATH 启动，以避开 Anaconda / MSYS2 等工具的
 DLL 与 Electron V8 快照的冲突。`run-desktop.sh` 不影响系统 PATH 设置，
 仅在启动的进程内生效。
