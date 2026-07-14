@@ -159,6 +159,21 @@ For the full command lists, see the [CLI guide](https://hermes-agent.nousresearc
 
 ---
 
+## 桌面端（Windows）
+
+项目提供便携桌面启动器 `run-desktop.sh`，在 Git Bash 中运行：
+
+```bash
+./run-desktop.sh
+```
+
+![Hermes 桌面端](assets/desktop-app.png)
+
+> **注意**：桌面端使用独立干净 PATH 启动，避开 Anaconda / MSYS2 等 DLL 与
+> Electron V8 快照的冲突，不影响系统环境。
+
+---
+
 ## Documentation
 
 All documentation lives at **[hermes-agent.nousresearch.com/docs](https://hermes-agent.nousresearch.com/docs/)**:
