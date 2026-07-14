@@ -11,6 +11,7 @@ __pycache__/
 key.txt
 workspace/config.yaml
 workspace/*_cache.json
+portable/
 .op.env
 .env.local
 .env.development.local
