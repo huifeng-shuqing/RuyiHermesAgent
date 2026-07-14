@@ -20,11 +20,29 @@ const distDir = resolve(root, 'dist')
 mkdirSync(distDir, { recursive: true })
 
 const mainEntry = resolve(root, 'electron/main.ts')
-const mainOut = resolve(distDir, 'electron-main.cjs')
+const mainOut = resolve(distDir, 'electron-main.mjs')
 const preloadEntry = resolve(root, 'electron/preload.ts')
 const preloadOut = resolve(distDir, 'electron-preload.js')
 
-const external = ['electron', 'node-pty', 'fs']
+// Plugin: rewrite `electron` imports to `electron/main` so the bundled
+// output uses require("electron/main") instead of require("electron").
+// `electron/main` has no on-disk fallback (unlike the `electron` stub
+// package which silently returns an exe path string), so Electron's
+// runtime built-in loader must intercept it — matching the pattern used
+// by default_app.asar.  Fixes `process.type === undefined` and
+// `require('electron')` returning a string on systems where the V8
+// snapshot initialization is incomplete.
+const electronMainPlugin = {
+  name: 'electron-main',
+  setup(build) {
+    build.onResolve({ filter: /^electron$/ }, () => ({
+      path: 'electron/main',
+      external: true,
+    }))
+  },
+}
+
+const external = ['node-pty', 'fs']
 // Production bundles bake packaged=true so unpackaged `electron .` still
 // behaves like a packaged build. Dev bundles (`--dev`) leave the env alone
 // so HERMES_DESKTOP_DEV_SERVER / source-tree resolution keep working.
@@ -38,10 +56,14 @@ await build({
   entryPoints: [mainEntry],
   bundle: true,
   platform: 'node',
-  format: 'cjs',
+  format: 'esm',
   target: 'node20',
   outfile: mainOut,
   external,
+  plugins: [electronMainPlugin],
+  banner: {
+    js: "import { createRequire } from 'module'; const require = createRequire(import.meta.url);",
+  },
   define,
   logLevel: 'info',
 })
@@ -55,7 +77,7 @@ await build({
   format: 'cjs',
   target: 'node20',
   outfile: preloadOut,
-  external,
+  external: ['electron', 'node-pty', 'fs'],
   define,
   logLevel: 'info',
 })

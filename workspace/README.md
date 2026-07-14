@@ -36,3 +36,15 @@
    - 首次会自动从 `.env.example` 生成 `.env` 并提示你填密钥；
    - 填好密钥后再次运行即进入；
    - 跑 `.\smoke-test.ps1` 做落地自检。
+
+## 启动桌面端（Windows）
+
+项目根目录提供了 `run-desktop.sh` 启动器，在 Git Bash 中执行：
+
+```bash
+./run-desktop.sh
+```
+
+**注意**：桌面端使用独立的干净 PATH 启动，以避开 Anaconda / MSYS2 等工具的
+DLL 与 Electron V8 快照的冲突。`run-desktop.sh` 不影响系统 PATH 设置，
+仅在启动的进程内生效。

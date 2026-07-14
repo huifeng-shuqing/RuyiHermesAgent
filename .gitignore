@@ -10,6 +10,7 @@ __pycache__/
 .env
 key.txt
 workspace/config.yaml
+workspace/*_cache.json
 .op.env
 .env.local
 .env.development.local
